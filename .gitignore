@@ -1,0 +1,115 @@
+# CMake build directories
+cmake-build-*/
+build/
+out/
+
+# CMake files
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile
+*.cmake
+!CMakeLists.txt
+
+# IDE files (CLion)
+.idea/
+
+# C++ compiled files
+*.o
+*.obj
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+C3PO
+C3PO.exe
+
+# IDE specific files - CLion / IntelliJ
+.idea/
+*.iml
+*.iws
+.idea_modules/
+
+# Visual Studio Code
+.vscode/
+*.code-workspace
+
+# Visual Studio
+.vs/
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
+*.sln
+
+# OS specific files
+# Windows
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Linux
+*~
+.directory
+
+# Backup files
+*.bak
+*.swp
+*.swo
+*~
+
+# Debug and profiling
+*.dSYM/
+*.su
+*.idb
+*.pdb
+
+# Testing
+Testing/
+CTestTestfile.cmake
+
+# Package managers
+conan/
+vcpkg_installed/
+
+# Documentation
+docs/html/
+docs/latex/
+Doxyfile.bak
+
+# Logs
+*.log
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+.Trashes
+ehthumbs.db
+Thumbs.db
