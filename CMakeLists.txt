@@ -3,8 +3,12 @@ project(C3PO)
 
 set(CMAKE_CXX_STANDARD 26)
 
-add_executable(C3PO src/main.cpp
-        src/Lexer.cpp
-        include/Lexer.hpp
-        include/FileUtil.hpp
-        include/Token.hpp)
+add_executable(C3PO 
+    src/main.cpp
+    src/Lexer.cpp
+    src/Token.cpp
+    include/Lexer.hpp
+    include/FileUtil.hpp
+    include/Token.hpp
+        src/Token.cpp
+)

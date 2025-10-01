@@ -5,33 +5,51 @@
 #ifndef C3PO_TOKEN_HPP
 #define C3PO_TOKEN_HPP
 #include <string>
+#include <ostream>
 
 enum class TokenType
 {
-    VAR,
+
     IDENTIFIER,
     NUMBER,
+    
+
+    VAR,
     PRINT,
+    
+
     PLUS,
     MINUS,
     EQUALS,
-    SEMICOLON
+
+    SEMICOLON,
+    LEFT_PAREN,
+    RIGHT_PAREN,
+    LEFT_BRACE,
+    RIGHT_BRACE,
+
+    UNKNOWN,
+    END_OF_FILE
 };
 
 class Token
 {
+private:
     TokenType m_type;
     std::string m_value;
 
 public:
-    explicit Token(TokenType type, std::string value)
+    Token(TokenType type, std::string value)
         : m_type(type), m_value(std::move(value))
     {
     }
 
-    [[nodiscard("wtf")]] TokenType type() const { return m_type; }
-    [[nodiscard]] const std::string& getValue() const { return m_value; }
-};
+    TokenType getType() const { return m_type; }
+    const std::string& getValue() const { return m_value; }
 
+    static std::string typeToString(TokenType type);
+
+    friend std::ostream& operator<<(std::ostream& os, const Token& token);
+};
 
 #endif //C3PO_TOKEN_HPP

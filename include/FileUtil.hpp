@@ -4,6 +4,7 @@
 
 #ifndef C3PO_FILEUTIL_HPP
 #define C3PO_FILEUTIL_HPP
+#include <fstream>
 #include <iterator>
 #include <stdexcept>
 #include <string>
