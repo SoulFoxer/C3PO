@@ -1,4 +1,4 @@
-# C3PO Compiler
+# C3PO Compiler (Work in progress)
 
 C3PO is a small experimental compiler for a custom programming language that I’m building from scratch.  
 The main goal of this project is to **learn by doing** — to understand the full process of implementing a programming language, step by step.
@@ -13,4 +13,4 @@ The main goal of this project is to **learn by doing** — to understand the ful
 
 ## Example
 ```c
-var x = 42
+var x = 42;
