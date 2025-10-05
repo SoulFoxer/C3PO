@@ -11,4 +11,8 @@ add_executable(C3PO
     include/FileUtil.hpp
     include/Token.hpp
         src/Token.cpp
+        src/Parser.cpp
+        include/Parser.hpp
+        src/statements/VariableDeclarationStatement.cpp
+        include/statements/VariableDeclarationStatement.hpp
 )

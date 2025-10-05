@@ -1,0 +1,14 @@
+//
+// Created by leonw on 05.10.2025.
+//
+
+#ifndef C3PO_VARIABLEDECLARATIONSTATEMENT_HPP
+#define C3PO_VARIABLEDECLARATIONSTATEMENT_HPP
+
+
+class VariableDeclarationStatement
+{
+};
+
+
+#endif //C3PO_VARIABLEDECLARATIONSTATEMENT_HPP

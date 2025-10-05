@@ -2,6 +2,7 @@
 #include "../include/Token.hpp"
 #include "../include/Lexer.hpp"
 #include "../include/FileUtil.hpp"
+#include "../include/Parser.hpp"
 
 int main()
 {
@@ -14,6 +15,8 @@ int main()
     {
         std::cout << token << std::endl;
     }
+
+    Parser parser(tokens)
     
     return 0;
 }
