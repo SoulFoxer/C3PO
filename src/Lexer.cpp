@@ -90,13 +90,15 @@ Token Lexer::scanIdentifierOrKeyword()
 
 Token Lexer::scanNumber()
 {
-    std::string number;
+    std::string numberString;
     
     while (!isAtEnd() && std::isdigit(getCurrentChar()))
     {
-        number += getCurrentChar();
+        numberString += getCurrentChar();
         advance();
     }
+
+    int number = std::stoi(numberString);
     
     return Token(TokenType::NUMBER, number);
 }
@@ -130,10 +132,6 @@ Token Lexer::scanSymbol()
     }
 }
 
-// ============================================================================
-// Main Lexer Method
-// ============================================================================
-
 std::vector<Token> Lexer::lex()
 {
     std::vector<Token> tokens;
@@ -164,8 +162,7 @@ std::vector<Token> Lexer::lex()
             tokens.push_back(scanSymbol());
         }
     }
-    
-    // Add EOF token
+
     tokens.push_back(Token(TokenType::END_OF_FILE, ""));
     
     return tokens;

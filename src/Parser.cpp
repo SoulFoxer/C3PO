@@ -3,11 +3,52 @@
 //
 
 #include "../include/Parser.hpp"
+
+#include <iostream>
+
 #include "../include/statements/VariableDeclarationStatement.hpp"
 
-void Parser::parse()
+VariableDeclarationStatement Parser::parse()
 {
-    // first only parse variableDeclarationStatement
+    std::cout << "started parsing..." << std::endl;
+    // Parse variable declaration statement: var myname = value;
+    consume(TokenType::VAR);
+
+    Token tokenIdentifier = consume(TokenType::IDENTIFIER);
+    consume(TokenType::EQUALS);
+    
+    // Get the current token to determine if it's a number or identifier (string)
+    Token valueToken = currentToken();
+    
+    std::variant<int, std::string> value;
+    
+    if (valueToken.getType() == TokenType::NUMBER)
+    {
+        consume(TokenType::NUMBER);
+        value = std::get<int>(valueToken.getValue());
+    }
+    else if (valueToken.getType() == TokenType::IDENTIFIER)
+    {
+        // Assuming string literals are parsed as IDENTIFIER or add a STRING token type
+        consume(TokenType::IDENTIFIER);
+        value = std::get<std::string>(valueToken.getValue());
+    }
+    else
+    {
+        throw std::runtime_error("Expected NUMBER or STRING value");
+    }
+    
+    consume(TokenType::SEMICOLON);
+
+    std::string identifierString = std::get<std::string>(tokenIdentifier.getValue());
+    std::cout << "Parsed variable declaration: " << identifierString << " = ";
+
+    std::visit([](const auto& val) {
+        std::cout << val;
+    }, value);
+
+    std::cout << ";" <<std::endl;
+    return VariableDeclarationStatement(identifierString, value);
 }
 
 Token Parser::peek()
@@ -28,6 +69,7 @@ Token Parser::consume(TokenType type)
         throw std::runtime_error(
             "Expected token type " + Token::typeToString(type) + " but got " + Token::typeToString(token.getType()));
     }
+    m_current++;
     return token;
 }
 

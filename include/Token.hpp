@@ -6,6 +6,7 @@
 #define C3PO_TOKEN_HPP
 #include <string>
 #include <ostream>
+#include <variant>
 
 enum class TokenType
 {
@@ -36,7 +37,7 @@ class Token
 {
 private:
     TokenType m_type;
-    std::string m_value;
+    std::variant<int,std::string> m_value;
 
 public:
     Token(TokenType type, std::string value)
@@ -44,8 +45,13 @@ public:
     {
     }
 
+    Token(TokenType type, int value)
+        : m_type(type), m_value(value)
+    {
+    }
+
     TokenType getType() const { return m_type; }
-    const std::string& getValue() const { return m_value; }
+    const std::variant<int,std::string> getValue() const { return m_value; }
 
     static std::string typeToString(TokenType type);
 

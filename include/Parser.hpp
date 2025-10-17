@@ -7,6 +7,7 @@
 #include <vector>
 
 #include "Token.hpp"
+#include "statements/VariableDeclarationStatement.hpp"
 
 
 class Parser
@@ -21,7 +22,7 @@ public:
 
     }
 
-    void parse();
+    VariableDeclarationStatement parse();
     Token peek();
     Token consume(TokenType type);
     Token currentToken();

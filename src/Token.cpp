@@ -34,6 +34,10 @@ std::string Token::typeToString(TokenType type)
 
 std::ostream& operator<<(std::ostream& os, const Token& token)
 {
-    os << Token::typeToString(token.m_type) << "('" << token.m_value << "')";
+    os << Token::typeToString(token.m_type) << "('";
+    std::visit([&os](const auto& val) {
+        os << val;
+    }, token.m_value);
+    os << "')";
     return os;
 }

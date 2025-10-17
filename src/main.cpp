@@ -16,7 +16,8 @@ int main()
         std::cout << token << std::endl;
     }
 
-    Parser parser(tokens)
-    
+    Parser parser(tokens);
+    VariableDeclarationStatement variable_declaration_statement = parser.parse();
+
     return 0;
 }
