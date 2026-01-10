@@ -17,7 +17,13 @@ int main()
     }
 
     Parser parser(tokens);
-    VariableDeclarationStatement variable_declaration_statement = parser.parse();
+
+    std::vector<std::unique_ptr<Statement>> statements = parser.parse();
+
+    for (const auto& statement : statements)
+    {
+        std::cout << statement->toString() << std::endl;
+    }
 
     return 0;
 }
