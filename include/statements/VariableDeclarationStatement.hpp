@@ -29,32 +29,24 @@ public:
     const std::string& getVariableName() const { return m_variableName; }
     const std::optional<std::variant<int, std::string>>& getInitialValue() const { return m_initialValue; }
 
+
     std::string toString() const override
     {
-        std::string result = "var " + m_variableName;
-
-        // 1. Check if the Optional has a value
-        if (m_initialValue.has_value()) {
-
-            // 2. Dereference the optional (*m_initialValue) to get the variant.
-            // 3. Use std::visit to handle the different types inside the variant.
-            std::string valueStr = std::visit([](auto&& arg) -> std::string {
-                using T = std::decay_t<decltype(arg)>;
-
-                if constexpr (std::is_same_v<T, int>) {
-                    return std::to_string(arg);
-                }
-                else if constexpr (std::is_same_v<T, std::string>) {
-                    return "\"" + arg + "\""; // Wrap string literals in quotes
-                }
-                return "";
-            }, *m_initialValue);
-
-            result += " = " + valueStr;
+        std::string valueStr = "null";
+        if (m_initialValue.has_value())
+        {
+            // Prüfen, ob ein int enthalten ist
+            if (std::holds_alternative<int>(m_initialValue.value()))
+            {
+                valueStr = std::to_string(std::get<int>(m_initialValue.value()));
+            }
+            // Prüfen, ob ein string enthalten ist
+            else if (std::holds_alternative<std::string>(m_initialValue.value()))
+            {
+                valueStr = std::get<std::string>(m_initialValue.value());
+            }
         }
-
-        result += ";";
-        return result;
+        return "VariableDeclarationStatement(" + m_variableName + " = " + valueStr + ")";
     }
 };
 

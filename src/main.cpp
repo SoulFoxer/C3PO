@@ -18,12 +18,14 @@ int main()
 
     Parser parser(tokens);
 
-    std::vector<std::unique_ptr<Statement>> statements = parser.parse();
+    auto forStatement = parser.parse();
 
-    for (const auto& statement : statements)
+    /*for (const auto& statement : forStatement)
     {
         std::cout << statement->toString() << std::endl;
-    }
+    }*/
+
+    std::cout << forStatement->toString();
 
     return 0;
 }

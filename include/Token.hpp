@@ -30,7 +30,7 @@ enum class TokenType
     RIGHT_BRACE,
 
     UNKNOWN,
-    END_OF_FILE
+    END_OF_FILE, ForLoop
 };
 
 class Token

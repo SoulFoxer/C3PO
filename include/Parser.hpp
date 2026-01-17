@@ -7,6 +7,7 @@
 #include <vector>
 
 #include "Token.hpp"
+#include "statements/ForLoopStatement.hpp"
 #include "statements/Statement.hpp"
 #include "statements/VariableDeclarationStatement.hpp"
 
@@ -24,7 +25,7 @@ public:
     }
 
     std::unique_ptr<Statement> parseVariableStatement();
-    std::vector<std::unique_ptr<Statement>> parse();
+    std::unique_ptr<ForLoopStatement>parse();
     Token peek();
     Token consume(TokenType type);
     Token currentToken();

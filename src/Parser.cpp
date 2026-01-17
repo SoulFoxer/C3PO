@@ -7,21 +7,42 @@
 #include <iostream>
 
 #include "../include/statements/VariableDeclarationStatement.hpp"
-
-std::vector<std::unique_ptr<Statement>> Parser::parse()
+#include "statements/ForLoopStatement.hpp"
+// std::vector<std::unique_ptr<Statement>>
+std::unique_ptr<ForLoopStatement> Parser::parse()
 {
     std::vector<std::unique_ptr<Statement>> statements;
+
     std::cout << "started parsing..." << std::endl;
 
-    auto nextToken = peek();
-
-    if (nextToken.getType() == TokenType::VAR)
+    while (currentToken().getType() != TokenType::END_OF_FILE)
     {
-        statements.push_back(parseVariableStatement());
+        if (currentToken().getType() == TokenType::ForLoop)
+        {
+            consume(TokenType::ForLoop);
+
+            if (currentToken().getType() == TokenType::LEFT_BRACE)
+            {
+                consume(TokenType::LEFT_BRACE);
+
+
+                while (currentToken().getType() != TokenType::RIGHT_BRACE &&
+                    currentToken().getType() != TokenType::END_OF_FILE)
+                {
+                    statements.push_back(parseVariableStatement());
+                }
+                consume(TokenType::RIGHT_BRACE);
+            }
+        }
+
+        else if (currentToken().getType() == TokenType::VAR)
+        {
+            statements.push_back(parseVariableStatement());
+        }
     }
 
     std::cout << "finished parsing..." << std::endl;
-    return statements;
+    return std::make_unique<ForLoopStatement>(std::move(statements));
 }
 
 Token Parser::peek()
@@ -91,5 +112,5 @@ std::unique_ptr<Statement> Parser::parseVariableStatement()
     }, value);
 
     std::cout << ";" << std::endl;
-    return  std::make_unique<VariableDeclarationStatement>(identifierString, value);
+    return std::make_unique<VariableDeclarationStatement>(identifierString, value);
 }

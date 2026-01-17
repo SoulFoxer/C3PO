@@ -1,1 +1,7 @@
+
+for {
 var x = 42;
+var y = 43;
+var z = 44;
+var u = 45;
+}

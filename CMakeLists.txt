@@ -18,6 +18,11 @@ add_executable(C3PO
         include/Parser.hpp
         include/statements/VariableDeclarationStatement.hpp
         include/statements/Statement.hpp
+        include/expressions/ExpressionStatement.hpp
+        include/expressions/ExpressionStatement.hpp
+        include/expressions/Expression.hpp
+        include/expressions/LiteralExpression.hpp
+        include/statements/ForLoopStatement.hpp
 )
 
 # 2. THEN configure the include directories

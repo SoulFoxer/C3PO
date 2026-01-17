@@ -53,7 +53,8 @@ std::map<std::string, TokenType> Lexer::buildKeywords()
 {
     return {
         {"var", TokenType::VAR},
-        {"print", TokenType::PRINT}
+        {"print", TokenType::PRINT},
+        {"for", TokenType::ForLoop}
     };
 }
 
@@ -111,24 +112,24 @@ Token Lexer::scanSymbol()
     switch (currentChar)
     {
     case '+':
-        return Token(TokenType::PLUS, "+");
+        return {TokenType::PLUS, "+"};
     case '-':
-        return Token(TokenType::MINUS, "-");
+        return {TokenType::MINUS, "-"};
     case ';':
-        return Token(TokenType::SEMICOLON, ";");
+        return {TokenType::SEMICOLON, ";"};
     case '=':
-        return Token(TokenType::EQUALS, "=");
+        return {TokenType::EQUALS, "="};
     case '(':
-        return Token(TokenType::LEFT_PAREN, "(");
+        return {TokenType::LEFT_PAREN, "("};
     case ')':
-        return Token(TokenType::RIGHT_PAREN, ")");
+        return {TokenType::RIGHT_PAREN, ")"};
     case '{':
-        return Token(TokenType::LEFT_BRACE, "{");
+        return {TokenType::LEFT_BRACE, "{"};
     case '}':
-        return Token(TokenType::RIGHT_BRACE, "}");
+        return {TokenType::RIGHT_BRACE, "}"};
     default:
         // Handle unknown character
-        return Token(TokenType::UNKNOWN, std::string(1, currentChar));
+        return {TokenType::UNKNOWN, std::string(1, currentChar)};
     }
 }
 
