@@ -35,12 +35,12 @@ public:
         std::string valueStr = "null";
         if (m_initialValue.has_value())
         {
-            // Prüfen, ob ein int enthalten ist
+
             if (std::holds_alternative<int>(m_initialValue.value()))
             {
                 valueStr = std::to_string(std::get<int>(m_initialValue.value()));
             }
-            // Prüfen, ob ein string enthalten ist
+
             else if (std::holds_alternative<std::string>(m_initialValue.value()))
             {
                 valueStr = std::get<std::string>(m_initialValue.value());

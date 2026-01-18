@@ -10,14 +10,15 @@ int main()
     Lexer lexer(content);
     auto tokens = lexer.lex();
 
-    std::cout << "=== Tokens ===" << std::endl;
+    /*std::cout << "=== Tokens ===" << std::endl;
     for (const auto& token : tokens)
     {
         std::cout << token << std::endl;
-    }
+    }*/
 
     Parser parser(tokens);
 
+    // TODO for now its only the parsed for loop, but in the future it should be a vector of Statements
     auto forStatement = parser.parse();
 
     /*for (const auto& statement : forStatement)

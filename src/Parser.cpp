@@ -8,11 +8,36 @@
 
 #include "../include/statements/VariableDeclarationStatement.hpp"
 #include "statements/ForLoopStatement.hpp"
-// std::vector<std::unique_ptr<Statement>>
-std::unique_ptr<ForLoopStatement> Parser::parse()
+
+std::unique_ptr<BlockStatement> Parser::parseBlockStatement()
 {
     std::vector<std::unique_ptr<Statement>> statements;
 
+    consume(TokenType::LEFT_BRACE);
+
+    while (currentToken().getType() != TokenType::RIGHT_BRACE &&
+        currentToken().getType() != TokenType::END_OF_FILE)
+    {
+        // TODO hier alle möglichen Statements abfragen
+        if (currentToken().getType() == TokenType::VAR)
+        {
+            statements.push_back(parseVariableStatement());
+        }
+        else
+        {
+            // Fallback oder Fehlerbehandlung für unbekannte Statements im Block
+            throw std::runtime_error("Unexpected token in block");
+        }
+    }
+    consume(TokenType::RIGHT_BRACE);
+
+    return std::make_unique<BlockStatement>(std::move(statements));
+}
+
+// std::vector<std::unique_ptr<Statement>>
+std::unique_ptr<ForLoopStatement> Parser::parse()
+{
+    std::unique_ptr<BlockStatement> blockStatement = nullptr;
     std::cout << "started parsing..." << std::endl;
 
     while (currentToken().getType() != TokenType::END_OF_FILE)
@@ -21,28 +46,23 @@ std::unique_ptr<ForLoopStatement> Parser::parse()
         {
             consume(TokenType::ForLoop);
 
-            if (currentToken().getType() == TokenType::LEFT_BRACE)
-            {
-                consume(TokenType::LEFT_BRACE);
-
-
-                while (currentToken().getType() != TokenType::RIGHT_BRACE &&
-                    currentToken().getType() != TokenType::END_OF_FILE)
-                {
-                    statements.push_back(parseVariableStatement());
-                }
-                consume(TokenType::RIGHT_BRACE);
-            }
+            blockStatement = parseBlockStatement();
         }
 
-        else if (currentToken().getType() == TokenType::VAR)
-        {
-            statements.push_back(parseVariableStatement());
-        }
+        // TODO hier weitere möglichen Statements parsen
+
+        /* else if (currentToken().getType() == TokenType::VAR)
+         {
+             statements.push_back(parseVariableStatement());
+         }*/
+    }
+
+    if (!blockStatement) {
+        throw std::runtime_error("No for loop body found");
     }
 
     std::cout << "finished parsing..." << std::endl;
-    return std::make_unique<ForLoopStatement>(std::move(statements));
+    return std::make_unique<ForLoopStatement>(std::move(blockStatement));
 }
 
 Token Parser::peek()

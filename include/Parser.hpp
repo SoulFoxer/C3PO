@@ -7,6 +7,7 @@
 #include <vector>
 
 #include "Token.hpp"
+#include "statements/BlockStatement.hpp"
 #include "statements/ForLoopStatement.hpp"
 #include "statements/Statement.hpp"
 #include "statements/VariableDeclarationStatement.hpp"
@@ -29,6 +30,8 @@ public:
     Token peek();
     Token consume(TokenType type);
     Token currentToken();
+
+    std::unique_ptr<BlockStatement> parseBlockStatement();
 
 };
 

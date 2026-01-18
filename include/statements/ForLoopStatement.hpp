@@ -11,10 +11,10 @@
 
 class ForLoopStatement : public Statement
 {
-    std::vector<std::unique_ptr<Statement>> body;
+    std::unique_ptr<BlockStatement> body;
 
 public:
-    ForLoopStatement(std::vector<std::unique_ptr<Statement>> body) : body(std::move(body))
+    ForLoopStatement(std::unique_ptr<BlockStatement> body) : body(std::move(body))
     {
     }
 
@@ -23,18 +23,26 @@ public:
     {
         std::string result;
 
-        for (auto& statement : body)
+        result += "for";
+        result += " {";
+        for (auto& statement : body.get()->getStatements())
         {
-            result += statement->toString();
+            result += statement->toString()+ ", ";
         }
-        return "for loop "+ result+ ",";
-        return "for loop";
+        result += "}";
+        return result;
     }
 
-    std::vector<std::unique_ptr<Statement>>& getBody()
+    /*std::vector<std::unique_ptr<Statement>>& getBody()
+    {
+        return body;
+    }*/
+
+    std::unique_ptr<BlockStatement>& getBody()
     {
         return body;
     }
+
 };
 
 #endif //C3PO_FORLOOPSTATEMENT_HPP

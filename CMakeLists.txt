@@ -23,6 +23,7 @@ add_executable(C3PO
         include/expressions/Expression.hpp
         include/expressions/LiteralExpression.hpp
         include/statements/ForLoopStatement.hpp
+        include/statements/BlockStatement.hpp
 )
 
 # 2. THEN configure the include directories
