@@ -10,8 +10,6 @@
 #include "statements/BlockStatement.hpp"
 #include "statements/ForLoopStatement.hpp"
 #include "statements/Statement.hpp"
-#include "statements/VariableDeclarationStatement.hpp"
-
 
 class Parser
 {

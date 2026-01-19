@@ -4,10 +4,6 @@
 #include "../include/Lexer.hpp"
 #include "../include/Token.hpp"
 
-// ============================================================================
-// Helper Methods
-// ============================================================================
-
 void Lexer::advance()
 {
     m_current++;
@@ -36,18 +32,10 @@ char Lexer::peek(size_t offset) const
     return m_source[m_current + offset];
 }
 
-// ============================================================================
-// Character Classification
-// ============================================================================
-
 bool Lexer::isWhitespace(char c) const
 {
     return c == ' ' || c == '\r' || c == '\t' || c == '\n';
 }
-
-// ============================================================================
-// Keyword Management
-// ============================================================================
 
 std::map<std::string, TokenType> Lexer::buildKeywords()
 {
@@ -57,10 +45,6 @@ std::map<std::string, TokenType> Lexer::buildKeywords()
         {"for", TokenType::ForLoop}
     };
 }
-
-// ============================================================================
-// Token Scanning Methods
-// ============================================================================
 
 void Lexer::skipWhitespace()
 {
@@ -80,7 +64,6 @@ Token Lexer::scanIdentifierOrKeyword()
         advance();
     }
 
-    // Check if it's a keyword
     if (m_keywords.contains(name))
     {
         return Token(m_keywords.at(name), name);
@@ -128,7 +111,6 @@ Token Lexer::scanSymbol()
     case '}':
         return {TokenType::RIGHT_BRACE, "}"};
     default:
-        // Handle unknown character
         return {TokenType::UNKNOWN, std::string(1, currentChar)};
     }
 }
@@ -152,12 +134,10 @@ std::vector<Token> Lexer::lex()
         {
             tokens.push_back(scanIdentifierOrKeyword());
         }
-        // Numbers
         else if (std::isdigit(currentChar))
         {
             tokens.push_back(scanNumber());
         }
-        // Operators
         else
         {
             tokens.push_back(scanSymbol());

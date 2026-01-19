@@ -10,11 +10,6 @@
 #include <variant>
 #include "Statement.hpp"
 
-#include "../Parser.hpp"
-
-// Forward-Deklaration oder #include für deine Expression-Klasse
-
-
 class VariableDeclarationStatement : public Statement
 {
     std::string m_variableName;

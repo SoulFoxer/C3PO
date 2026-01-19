@@ -25,7 +25,6 @@ std::unique_ptr<BlockStatement> Parser::parseBlockStatement()
         }
         else
         {
-            // Fallback oder Fehlerbehandlung für unbekannte Statements im Block
             throw std::runtime_error("Unexpected token in block");
         }
     }
@@ -34,7 +33,6 @@ std::unique_ptr<BlockStatement> Parser::parseBlockStatement()
     return std::make_unique<BlockStatement>(std::move(statements));
 }
 
-// std::vector<std::unique_ptr<Statement>>
 std::unique_ptr<ForLoopStatement> Parser::parse()
 {
     std::unique_ptr<BlockStatement> blockStatement = nullptr;
@@ -94,13 +92,11 @@ Token Parser::currentToken()
 
 std::unique_ptr<Statement> Parser::parseVariableStatement()
 {
-    // Parse variable declaration statement: var myname = value;
     consume(TokenType::VAR);
 
     Token tokenIdentifier = consume(TokenType::IDENTIFIER);
     consume(TokenType::EQUALS);
 
-    // Get the current token to determine if it's a number or identifier (string)
     Token valueToken = currentToken();
 
     std::variant<int, std::string> value;
@@ -112,7 +108,7 @@ std::unique_ptr<Statement> Parser::parseVariableStatement()
     }
     else if (valueToken.getType() == TokenType::IDENTIFIER)
     {
-        // Assuming string literals are parsed as IDENTIFIER or add a STRING token type
+        // TODO add String type
         consume(TokenType::IDENTIFIER);
         value = std::get<std::string>(valueToken.getValue());
     }
