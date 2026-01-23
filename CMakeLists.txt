@@ -22,6 +22,7 @@ add_executable(C3PO
         include/expressions/LiteralExpression.hpp
         include/statements/ForLoopStatement.hpp
         include/statements/BlockStatement.hpp
+        include/statements/ProgramStatement.hpp
 )
 
 target_include_directories(C3PO PUBLIC include)

@@ -8,6 +8,7 @@
 
 #include "../include/statements/VariableDeclarationStatement.hpp"
 #include "statements/ForLoopStatement.hpp"
+#include "statements/ProgramStatement.hpp"
 
 std::unique_ptr<BlockStatement> Parser::parseBlockStatement()
 {
@@ -33,34 +34,37 @@ std::unique_ptr<BlockStatement> Parser::parseBlockStatement()
     return std::make_unique<BlockStatement>(std::move(statements));
 }
 
-std::unique_ptr<ForLoopStatement> Parser::parse()
+std::unique_ptr<ProgramStatement> Parser::parse()
 {
     std::unique_ptr<BlockStatement> blockStatement = nullptr;
-    std::cout << "started parsing..." << std::endl;
+
+    std::vector<std::unique_ptr<Statement>> statements;
+    std::cout << "started parsing ProgramStatement" << std::endl;
 
     while (currentToken().getType() != TokenType::END_OF_FILE)
     {
-        if (currentToken().getType() == TokenType::ForLoop)
+        if (currentToken().getType() == TokenType::FOR_LOOP)
         {
-            consume(TokenType::ForLoop);
+            consume(TokenType::FOR_LOOP);
 
             blockStatement = parseBlockStatement();
         }
 
         // TODO hier weitere möglichen Statements parsen
 
-        /* else if (currentToken().getType() == TokenType::VAR)
-         {
-             statements.push_back(parseVariableStatement());
-         }*/
+        else if (currentToken().getType() == TokenType::VAR)
+        {
+            statements.push_back(parseVariableStatement());
+        }
     }
 
-    if (!blockStatement) {
-        throw std::runtime_error("No for loop body found");
+    if (!blockStatement)
+    {
+        // throw std::runtime_error("No for loop body found");
     }
 
     std::cout << "finished parsing..." << std::endl;
-    return std::make_unique<ForLoopStatement>(std::move(blockStatement));
+    return std::make_unique<ProgramStatement>(std::move(statements));
 }
 
 Token Parser::peek()
@@ -93,40 +97,32 @@ Token Parser::currentToken()
 std::unique_ptr<Statement> Parser::parseVariableStatement()
 {
     consume(TokenType::VAR);
-
     Token tokenIdentifier = consume(TokenType::IDENTIFIER);
     consume(TokenType::EQUALS);
 
     Token valueToken = currentToken();
 
-    std::variant<int, std::string> value;
-
     if (valueToken.getType() == TokenType::NUMBER)
     {
         consume(TokenType::NUMBER);
-        value = std::get<int>(valueToken.getValue());
+    }
+    else if (valueToken.getType() == TokenType::STRING)
+    {
+        consume(TokenType::STRING);
     }
     else if (valueToken.getType() == TokenType::IDENTIFIER)
     {
-        // TODO add String type
         consume(TokenType::IDENTIFIER);
-        value = std::get<std::string>(valueToken.getValue());
     }
     else
     {
-        throw std::runtime_error("Expected NUMBER or STRING value");
+        throw std::runtime_error("Expected NUMBER, STRING or IDENTIFIER");
     }
 
     consume(TokenType::SEMICOLON);
 
     std::string identifierString = std::get<std::string>(tokenIdentifier.getValue());
-    std::cout << "Parsed variable declaration: " << identifierString << " = ";
 
-    std::visit([](const auto& val)
-    {
-        std::cout << val;
-    }, value);
-
-    std::cout << ";" << std::endl;
-    return std::make_unique<VariableDeclarationStatement>(identifierString, value);
+    // ✅ Einfach den kompletten Token übergeben!
+    return std::make_unique<VariableDeclarationStatement>(identifierString, valueToken);
 }

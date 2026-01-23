@@ -29,6 +29,8 @@ private:
     Token scanNumber();
     Token scanSymbol();
 
+    Token scanString();
+
     static std::map<std::string, TokenType> buildKeywords();
 
 public:

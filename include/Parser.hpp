@@ -9,6 +9,7 @@
 #include "Token.hpp"
 #include "statements/BlockStatement.hpp"
 #include "statements/ForLoopStatement.hpp"
+#include "statements/ProgramStatement.hpp"
 #include "statements/Statement.hpp"
 
 class Parser
@@ -24,7 +25,7 @@ public:
     }
 
     std::unique_ptr<Statement> parseVariableStatement();
-    std::unique_ptr<ForLoopStatement>parse();
+    std::unique_ptr<ProgramStatement> parse();
     Token peek();
     Token consume(TokenType type);
     Token currentToken();

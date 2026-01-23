@@ -42,7 +42,7 @@ std::map<std::string, TokenType> Lexer::buildKeywords()
     return {
         {"var", TokenType::VAR},
         {"print", TokenType::PRINT},
-        {"for", TokenType::ForLoop}
+        {"for", TokenType::FOR_LOOP}
     };
 }
 
@@ -57,7 +57,7 @@ void Lexer::skipWhitespace()
 Token Lexer::scanIdentifierOrKeyword()
 {
     std::string name;
-    
+
     while (!isAtEnd() && std::isalnum(getCurrentChar()))
     {
         name += getCurrentChar();
@@ -68,14 +68,14 @@ Token Lexer::scanIdentifierOrKeyword()
     {
         return Token(m_keywords.at(name), name);
     }
-    
+
     return Token(TokenType::IDENTIFIER, name);
 }
 
 Token Lexer::scanNumber()
 {
     std::string numberString;
-    
+
     while (!isAtEnd() && std::isdigit(getCurrentChar()))
     {
         numberString += getCurrentChar();
@@ -83,7 +83,7 @@ Token Lexer::scanNumber()
     }
 
     int number = std::stoi(numberString);
-    
+
     return Token(TokenType::NUMBER, number);
 }
 
@@ -91,7 +91,7 @@ Token Lexer::scanSymbol()
 {
     char currentChar = getCurrentChar();
     advance();
-    
+
     switch (currentChar)
     {
     case '+':
@@ -115,6 +115,28 @@ Token Lexer::scanSymbol()
     }
 }
 
+Token Lexer::scanString()
+{
+    advance();
+
+    std::string string;
+    while (!isAtEnd() && getCurrentChar() != '"')
+    {
+        string += getCurrentChar();
+        advance();
+    }
+
+    if (isAtEnd())
+    {
+        throw std::runtime_error("Unterminated string");
+    }
+
+    advance();
+
+
+    return {TokenType::STRING, string};
+}
+
 std::vector<Token> Lexer::lex()
 {
     std::vector<Token> tokens;
@@ -122,12 +144,12 @@ std::vector<Token> Lexer::lex()
     while (!isAtEnd())
     {
         skipWhitespace();
-        
+
         if (isAtEnd())
         {
             break;
         }
-        
+
         char currentChar = getCurrentChar();
 
         if (std::isalpha(currentChar))
@@ -138,6 +160,10 @@ std::vector<Token> Lexer::lex()
         {
             tokens.push_back(scanNumber());
         }
+        else if (currentChar == '"')
+        {
+            tokens.push_back(scanString());
+        }
         else
         {
             tokens.push_back(scanSymbol());
@@ -145,6 +171,6 @@ std::vector<Token> Lexer::lex()
     }
 
     tokens.push_back(Token(TokenType::END_OF_FILE, ""));
-    
+
     return tokens;
 }

@@ -4,20 +4,20 @@
 
 #ifndef C3PO_TOKEN_HPP
 #define C3PO_TOKEN_HPP
+
 #include <string>
 #include <ostream>
 #include <variant>
 
 enum class TokenType
 {
-
     IDENTIFIER,
     NUMBER,
-    
+    STRING,
 
     VAR,
     PRINT,
-    
+    FOR_LOOP,
 
     PLUS,
     MINUS,
@@ -30,14 +30,17 @@ enum class TokenType
     RIGHT_BRACE,
 
     UNKNOWN,
-    END_OF_FILE, ForLoop
+    END_OF_FILE
 };
 
 class Token
 {
+public:
+    using Value = std::variant<int, std::string>;
+
 private:
     TokenType m_type;
-    std::variant<int,std::string> m_value;
+    Value m_value;
 
 public:
     Token(TokenType type, std::string value)
@@ -50,8 +53,28 @@ public:
     {
     }
 
+    explicit Token(TokenType type)
+        : m_type(type), m_value("")
+    {
+    }
+
+
     TokenType getType() const { return m_type; }
-    const std::variant<int,std::string> getValue() const { return m_value; }
+    const Value& getValue() const { return m_value; }
+
+    bool isLiteral() const
+    {
+        return m_type == TokenType::NUMBER ||
+               m_type == TokenType::STRING ||
+               m_type == TokenType::IDENTIFIER;
+    }
+
+    bool isOperator() const
+    {
+        return m_type == TokenType::PLUS ||
+               m_type == TokenType::MINUS ||
+               m_type == TokenType::EQUALS;
+    }
 
     static std::string typeToString(TokenType type);
 
