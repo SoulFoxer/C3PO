@@ -7,6 +7,7 @@
 #include <variant>
 #include <string>
 
+class FunctionCallExpression;
 using RuntimeValue = std::variant<int, std::string, bool>;
 
 class LiteralExpression;
@@ -19,6 +20,8 @@ class BinaryExpression;
 class VariableExpression;
 class PrintStatement;
 class IfStatement;
+class FunctionDeclarationStatement;
+class ExpressionStatement;
 
 class Visitor {
 public:
@@ -33,6 +36,7 @@ public:
     virtual void visit(ProgramStatement &stmt) = 0;
 
     virtual void visit(FunctionDeclarationStatement &stmt) = 0;
+    virtual RuntimeValue visit(FunctionCallExpression &expr) = 0;
 
     virtual RuntimeValue visit(LiteralExpression &expr) = 0;
 
@@ -42,6 +46,7 @@ public:
 
     virtual RuntimeValue visit(VariableExpression &expr) = 0;
     virtual void visit(IfStatement &stmt) = 0;
+    virtual void visit(ExpressionStatement &stmt) = 0;
 };
 
 #endif //C3PO_VISITOR_HPP

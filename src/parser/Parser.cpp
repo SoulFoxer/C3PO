@@ -8,6 +8,8 @@
 #include <iostream>
 
 #include "BinaryExpression.hpp"
+#include "../../include/statements/ExpressionStatement.hpp"
+#include "FunctionCallExpression.hpp"
 #include "FunctionDeclarationStatement.hpp"
 #include "IfStatement.hpp"
 #include "LiteralExpression.hpp"
@@ -37,6 +39,9 @@ std::unique_ptr<BlockStatement> Parser::parseBlockStatement()
         else if (currentToken().getType() == TokenType::IF)
         {
             statements.push_back(parseIfStatement());
+        }else if (currentToken().getType() == TokenType::IDENTIFIER)
+        {
+            statements.push_back(parseFunctionCallExpression());
         }
         else
         {
@@ -126,8 +131,18 @@ std::unique_ptr<Expression> Parser::parsePrimary()
 
     if (token.getType() == TokenType::IDENTIFIER)
     {
-        consume(TokenType::IDENTIFIER);
-        return std::make_unique<VariableExpression>(std::get<std::string>(token.getValue()));
+        auto nextToken = peek();
+        if (nextToken.getType() == TokenType::LEFT_PAREN)
+        {
+            consume(TokenType::IDENTIFIER);
+            consume(TokenType::LEFT_PAREN);
+            consume(TokenType::RIGHT_PAREN);
+            return std::make_unique<FunctionCallExpression>(std::get<std::string>(token.getValue()));
+        }else
+        {
+            consume(TokenType::IDENTIFIER);
+            return std::make_unique<VariableExpression>(std::get<std::string>(token.getValue()));
+        }
     }
 
     if (token.getType() == TokenType::LEFT_PAREN)
@@ -171,6 +186,9 @@ std::unique_ptr<ProgramStatement> Parser::parse()
         else if (currentToken().getType() == TokenType::IF)
         {
             statements.push_back(parseIfStatement());
+        }else if (currentToken().getType() == TokenType::IDENTIFIER)
+        {
+            statements.push_back(parseFunctionCallExpression());
         }
         else if (currentToken().getType() == TokenType::FUNCTION)
         {
@@ -284,9 +302,6 @@ std::unique_ptr<Statement> Parser::parseIfStatement()
 
 std::unique_ptr<FunctionDeclarationStatement> Parser::parseFunctionDeclarationStatement()
 {
-    std::unique_ptr<BlockStatement> blockStatement = nullptr;
-
-
     consume(TokenType::FUNCTION);
     Token functionNameToken = consume(TokenType::IDENTIFIER);
     consume(TokenType::LEFT_PAREN);
@@ -294,14 +309,29 @@ std::unique_ptr<FunctionDeclarationStatement> Parser::parseFunctionDeclarationSt
     std::unique_ptr<BlockStatement> statement = nullptr;
 
     std::string functionName = std::get<std::string>(functionNameToken.getValue());
-    while (currentToken().getType() != TokenType::END_OF_FILE && currentToken().getType() != TokenType::RIGHT_BRACE)
-    {
-        blockStatement = parseBlockStatement();
-    }
-
-    if (!blockStatement)
-    {
-    }
+    auto blockStatement = parseBlockStatement();
 
     return std::make_unique<FunctionDeclarationStatement>(std::move(functionName), std::move(blockStatement));
+}
+
+std::unique_ptr<Statement> Parser::parseFunctionCallExpression()
+{
+    auto nextToken = peek();
+
+    if (nextToken.getType() == TokenType::LEFT_PAREN)
+    {
+        std::string funcName = std::get<std::string>(currentToken().getValue());
+
+        consume(TokenType::IDENTIFIER);
+        consume(TokenType::LEFT_PAREN);
+        consume(TokenType::RIGHT_PAREN);
+        consume(TokenType::SEMICOLON);
+
+        auto callExpr = std::make_unique<FunctionCallExpression>(std::move(funcName));
+        return std::make_unique<ExpressionStatement>(std::move(callExpr));
+    }
+    else
+    {
+        throw std::runtime_error("Unerwarteter Bezeichner: Zuweisungen (a = 5) werden noch nicht unterstuetzt!");
+    }
 }

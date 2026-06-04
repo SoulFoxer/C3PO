@@ -30,6 +30,7 @@ public:
     std::unique_ptr<Statement> parsePrintStatement();
     std::unique_ptr<Statement> parseIfStatement();
     std::unique_ptr<FunctionDeclarationStatement> parseFunctionDeclarationStatement();
+    std::unique_ptr<Statement> parseFunctionCallExpression();
     std::unique_ptr<ProgramStatement> parse();
     Token peek();
     Token consume(TokenType type);

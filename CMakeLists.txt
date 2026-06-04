@@ -24,6 +24,8 @@ add_executable(C3PO
         src/expressions/VariableExpression.cpp
         src/visitor/ConcreteInterpreter.cpp
         src/statements/IfStatement.cpp
+        src/expressions/FunctionCallExpression.cpp
+        src/statements/ExpressionStatement.cpp
 )
 
 

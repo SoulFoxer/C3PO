@@ -6,6 +6,8 @@
 #include <stdexcept>
 #include "../../include/visitor/ConcreteInterpreter.hpp"
 
+#include "../../include/statements/ExpressionStatement.hpp"
+#include "FunctionCallExpression.hpp"
 #include "IfStatement.hpp"
 #include "../../include/statements/ProgramStatement.hpp"
 #include "../../include/statements/VariableDeclarationStatement.hpp"
@@ -74,6 +76,11 @@ void ConcreteInterpreter::visit(IfStatement& stmt)
     }
 }
 
+void ConcreteInterpreter::visit(ExpressionStatement& stmt)
+{
+    stmt.getExpression()->accept(*this);
+}
+
 void ConcreteInterpreter::visit(BlockStatement& block)
 {
     // creates new environment (scope) on the stack
@@ -134,6 +141,7 @@ RuntimeValue ConcreteInterpreter::visit(BinaryExpression& stmt)
 
 void ConcreteInterpreter::visit(FunctionDeclarationStatement& stmt)
 {
+    m_functions.insert({stmt.getFunctionName(), std::ref(stmt)});
 }
 
 void ConcreteInterpreter::visit(PrintStatement& stmt)
@@ -171,6 +179,21 @@ RuntimeValue ConcreteInterpreter::visit(VariableExpression& expr)
     }
 
     throw std::runtime_error("Laufzeitfehler: Undefinierte Variable '" + name + "'.");
+}
+
+RuntimeValue ConcreteInterpreter::visit(FunctionCallExpression& expr)
+{
+    std::string functionName = expr.getFunctionName();
+    if (m_functions.find(functionName) == m_functions.end())
+    {
+        throw std::runtime_error("Laufzeitfehler: Undefinierte Funktion '" + functionName + "()' aufgerufen.");
+    }
+
+    FunctionDeclarationStatement functionStmt = m_functions.at(functionName);
+
+    functionStmt.getBlockStatement()->accept(*this);
+
+    return false;
 }
 
 void ConcreteInterpreter::printVariables() const

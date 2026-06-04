@@ -1,12 +1,20 @@
+function test(){
+print("hello from test function");
+}
+
 var a = 15 + 2 * 6;
 var b = 21 * 2 + 42;
 var c = 42;
-var isEven = false;
+var isEven = true;
 var isOdd = true;
-if(true){
+if(isEven){
 print("if fall");
 }
 else
 {
 print("else fall");
 }
+
+test();
+
+
