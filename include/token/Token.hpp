@@ -39,6 +39,7 @@ enum class TokenType
     FUNCTION,
     UNKNOWN,
     END_OF_FILE,
+    IMPORT,
 };
 
 class Token

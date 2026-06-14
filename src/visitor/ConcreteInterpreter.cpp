@@ -9,6 +9,7 @@
 #include "../../include/statements/ExpressionStatement.hpp"
 #include "FunctionCallExpression.hpp"
 #include "IfStatement.hpp"
+#include "ImportStatement.hpp"
 #include "../../include/statements/ProgramStatement.hpp"
 #include "../../include/statements/VariableDeclarationStatement.hpp"
 #include "../../include/statements/ForLoopStatement.hpp"
@@ -18,10 +19,15 @@
 #include "../../include/expressions/LiteralExpression.hpp"
 #include "../../include/expressions/BinaryExpression.hpp"
 #include "../../include/expressions/VariableExpression.hpp"
+#include "fileutil/FileUtil.hpp"
+#include "lexer/Lexer.hpp"
+#include "parser/Parser.hpp"
 
-ConcreteInterpreter::ConcreteInterpreter()
+ConcreteInterpreter::ConcreteInterpreter(const std::string& basePath)
 {
     m_environmentStack.push_back({});
+
+    m_pathStack.push_back(std::filesystem::path(basePath));
 }
 
 void ConcreteInterpreter::visit(ProgramStatement& stmt)
@@ -79,6 +85,31 @@ void ConcreteInterpreter::visit(IfStatement& stmt)
 void ConcreteInterpreter::visit(ExpressionStatement& stmt)
 {
     stmt.getExpression()->accept(*this);
+}
+
+void ConcreteInterpreter::visit(ImportStatement& stmt)
+{
+    std::filesystem::path currentDir = m_pathStack.back();
+
+    std::filesystem::path combinedPath = currentDir / stmt.getFilePath();
+
+
+    std::string path = combinedPath.string();
+
+    std::string content = FileUtil::read_file(path);
+
+    Lexer lexer {content};
+    auto tokens = lexer.lex();
+    Parser parser {tokens};
+    auto importedProgram = parser.parse();
+
+    m_pathStack.push_back(combinedPath.parent_path());
+
+    importedProgram->accept(*this);
+
+    m_pathStack.pop_back();
+
+    m_importedASTs.push_back(std::move(importedProgram));
 }
 
 void ConcreteInterpreter::visit(BlockStatement& block)

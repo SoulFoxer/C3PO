@@ -43,7 +43,10 @@ int main(int argc, char* argv[])
             }
             std::cout << "============================\n" << std::endl;
         }
-        ConcreteInterpreter interpreter;
+        std::filesystem::path absoluteFilePath = std::filesystem::absolute(filePath);
+        std::string basePath = absoluteFilePath.parent_path().string();
+
+        ConcreteInterpreter interpreter {basePath};
         program->accept(interpreter);
 
         interpreter.printVariables();

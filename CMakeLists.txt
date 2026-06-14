@@ -26,6 +26,7 @@ add_executable(C3PO
         src/statements/IfStatement.cpp
         src/expressions/FunctionCallExpression.cpp
         src/statements/ExpressionStatement.cpp
+        src/statements/ImportStatement.cpp
 )
 
 
@@ -37,5 +38,5 @@ target_include_directories(C3PO PUBLIC include/visitor)
 target_include_directories(C3PO PUBLIC include)
 
 if(MINGW)
-    target_link_options(C3PO PRIVATE -static -static-libgcc -static-libstdc++ -Wl,--allow-multiple-definition)
+    target_link_options(C3PO PRIVATE -static-libgcc -static-libstdc++ -Wl,--allow-multiple-definition)
 endif()

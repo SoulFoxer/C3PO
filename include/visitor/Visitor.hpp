@@ -22,6 +22,7 @@ class PrintStatement;
 class IfStatement;
 class FunctionDeclarationStatement;
 class ExpressionStatement;
+class ImportStatement;
 
 class Visitor {
 public:
@@ -47,6 +48,7 @@ public:
     virtual RuntimeValue visit(VariableExpression &expr) = 0;
     virtual void visit(IfStatement &stmt) = 0;
     virtual void visit(ExpressionStatement &stmt) = 0;
+    virtual void visit(ImportStatement &stmt) = 0;
 };
 
 #endif //C3PO_VISITOR_HPP

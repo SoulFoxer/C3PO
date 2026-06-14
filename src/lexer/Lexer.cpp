@@ -55,7 +55,8 @@ std::map<std::string, TokenType> Lexer::buildKeywords()
         {"false", TokenType::FALSE_LITERAL},
         {"if", TokenType::IF},
         {"else",TokenType::ELSE},
-        {"function", TokenType::FUNCTION}
+        {"function", TokenType::FUNCTION},
+        {"import", TokenType::IMPORT}
     };
 }
 

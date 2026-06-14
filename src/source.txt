@@ -1,6 +1,4 @@
-function test(){
-print("hello from test function");
-}
+import "imp.txt";
 
 var a = 15 + 2 * 6;
 var b = 21 * 2 + 42;

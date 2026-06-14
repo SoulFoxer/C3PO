@@ -1,0 +1,3 @@
+function test(){
+    print("test from imported test function from imp.txt");
+}

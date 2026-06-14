@@ -12,6 +12,7 @@
 #include "FunctionCallExpression.hpp"
 #include "FunctionDeclarationStatement.hpp"
 #include "IfStatement.hpp"
+#include "ImportStatement.hpp"
 #include "LiteralExpression.hpp"
 #include "../../include/statements/VariableDeclarationStatement.hpp"
 #include "statements/ForLoopStatement.hpp"
@@ -39,9 +40,19 @@ std::unique_ptr<BlockStatement> Parser::parseBlockStatement()
         else if (currentToken().getType() == TokenType::IF)
         {
             statements.push_back(parseIfStatement());
-        }else if (currentToken().getType() == TokenType::IDENTIFIER)
+        }
+        else if (currentToken().getType() == TokenType::IDENTIFIER)
         {
             statements.push_back(parseFunctionCallExpression());
+        }
+        else if (currentToken().getType() == TokenType::IMPORT)
+        {
+            consume(TokenType::IMPORT);
+            Token pathToken = consume(TokenType::STRING);
+            consume(TokenType::SEMICOLON);
+
+            std::string path = std::get<std::string>(pathToken.getValue());
+            statements.push_back(std::make_unique<ImportStatement>(std::move(path)));
         }
         else
         {
@@ -138,7 +149,8 @@ std::unique_ptr<Expression> Parser::parsePrimary()
             consume(TokenType::LEFT_PAREN);
             consume(TokenType::RIGHT_PAREN);
             return std::make_unique<FunctionCallExpression>(std::get<std::string>(token.getValue()));
-        }else
+        }
+        else
         {
             consume(TokenType::IDENTIFIER);
             return std::make_unique<VariableExpression>(std::get<std::string>(token.getValue()));
@@ -186,13 +198,23 @@ std::unique_ptr<ProgramStatement> Parser::parse()
         else if (currentToken().getType() == TokenType::IF)
         {
             statements.push_back(parseIfStatement());
-        }else if (currentToken().getType() == TokenType::IDENTIFIER)
+        }
+        else if (currentToken().getType() == TokenType::IDENTIFIER)
         {
             statements.push_back(parseFunctionCallExpression());
         }
         else if (currentToken().getType() == TokenType::FUNCTION)
         {
             statements.push_back(parseFunctionDeclarationStatement());
+        }
+        else if (currentToken().getType() == TokenType::IMPORT)
+        {
+            consume(TokenType::IMPORT);
+            Token pathToken = consume(TokenType::STRING);
+            consume(TokenType::SEMICOLON);
+
+            std::string path = std::get<std::string>(pathToken.getValue());
+            statements.push_back(std::make_unique<ImportStatement>(std::move(path)));
         }
         else
         {
